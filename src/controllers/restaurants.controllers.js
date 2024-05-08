@@ -19,12 +19,17 @@ export const getRestaurant = async (req, res) => {
 };
 
 export const createRestaurant = async (req, res) => {
-    const data = req.body
+    try {
+        const data = req.body
 
-    const { rows } = await pool.query('INSERT INTO restaurants (id, rating, name, site, email, phone, street, city, state, lat, lng) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *',
-    [data.id, data.rating, data.name, data.site, data.email, data.phone, data.street, data.city, data.state, data.lat, data.lng])
+        const { rows } = await pool.query('INSERT INTO restaurants (id, rating, name, site, email, phone, street, city, state, lat, lng) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *',
+        [data.id, data.rating, data.name, data.site, data.email, data.phone, data.street, data.city, data.state, data.lat, data.lng])
+    
+        return res.json(rows[0]);
 
-    return res.json(rows[0]);
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
 };
 
 export const deleteRestaurant = async (req, res) => {
