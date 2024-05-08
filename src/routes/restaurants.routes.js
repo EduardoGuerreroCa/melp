@@ -20,7 +20,8 @@ router.delete('/restaurants/:id', (req, res) => {
 })
 
 router.put('/restaurants/:id', (req, res) => {
-    res.send('Getting restaurants')
+    const {id} = req.params
+    res.send('Updating restaurant: ' + id)
 })
 
 export default router;
