@@ -4,6 +4,8 @@ import restaurantRoutes from './routes/restaurants.routes.js'
 
 const app = express()
 
+// Para que pueda entender los datos json
+app.use(express.json());
 app.use(restaurantRoutes);
 
 app.listen(PORT)
