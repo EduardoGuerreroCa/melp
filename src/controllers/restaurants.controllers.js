@@ -53,3 +53,36 @@ export const updateRestaurant = async (req, res) => {
 
     return res.json(rows[0])
 };
+
+export const endpointRestaurants = async (req, res) => {
+    const { latitude, longitude, radius } = req.query;
+  
+    try {
+      // Consulta SQL con PostGIS
+      const query = `
+        SELECT
+          COUNT(*) AS count,
+          AVG(rating) AS avg,
+          STDDEV(rating) AS std
+        FROM restaurants
+        WHERE ST_DWithin(
+          ST_MakePoint(lng, lat)::geography,
+          ST_MakePoint($1, $2)::geography,
+          $3
+        );
+      `;
+  
+      const values = [longitude, latitude, radius];
+      const result = await pool.query(query, values);
+  
+      if (result.rows.length > 0) {
+        const { count, avg, std } = result.rows[0];
+        res.json({ count, avg, std });
+      } else {
+        res.json({ count: 0, avg: 0, std: 0 });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al obtener las estadísticas' });
+    }
+  };

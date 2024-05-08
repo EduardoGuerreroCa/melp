@@ -1,7 +1,10 @@
 import {Router} from 'express'
-import { createRestaurant, deleteRestaurant, getRestaurant, getRestaurants, updateRestaurant } from '../controllers/restaurants.controllers.js';
+import { createRestaurant, deleteRestaurant, endpointRestaurants, getRestaurant, getRestaurants, updateRestaurant } from '../controllers/restaurants.controllers.js';
 
 const router = Router();
+
+// Endpoint /restaurants/statistics
+router.get('/restaurants/statistics', endpointRestaurants);
 
 router.get('/restaurants', getRestaurants);
 
